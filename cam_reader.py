@@ -15,14 +15,14 @@ class CameraException(Exception):
     "Could not read camera"
     pass
 
+
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 USE_GPU = torch.cuda.is_available()
-MODEL_PATH = "VGG19_libras.pt"
+# MODEL_PATH = "VGG1_libras.pt"
+MODEL_PATH = "resnet_libras.pt"
 
-
-def load_model(num_classes):    
+def load_vgg(num_classes):    
     model = torchvision.models.vgg19_bn(weights="IMAGENET1K_V1")
-
 
     # Newly created modules have require_grad=True by default
     num_features = model.classifier[6].in_features
@@ -38,11 +38,25 @@ def load_model(num_classes):
         
     return model
     
+def load_resnet(num_classes):
+    model = torchvision.models.resnet34(weights='IMAGENET1K_V1')
+
+    model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
+    torch.nn.init.xavier_uniform_(model.fc.weight)
+
+    # Load fine tuned model
+    model.load_state_dict(torch.load(MODEL_PATH))
+    
+    if USE_GPU:
+        model.to(DEVICE)
+
+    return model
+
 
 def main():
     classes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y']
     letter = '#'
-    model = load_model(len(classes))
+    model = load_resnet(len(classes))
     
     cam = cv2.VideoCapture(0)
     mpHands = mp.solutions.hands
@@ -76,8 +90,9 @@ def main():
                 for id, lm in enumerate(handLms.landmark):
                     cx, cy = int(lm.x * width), int(lm.y * height)
                     if id == 9:
-                        start_point = (cx - 100 if cx - 100 > 0 else 0, cy - 100 if cy - 100 > 0 else 0)
-                        end_point = (cx + 100 if cx + 100 < width else width, cy + 100 if cy + 100 < height else height)
+                        delta_pixels = 120
+                        start_point = (cx - delta_pixels if cx - delta_pixels > 0 else 0, cy - delta_pixels if cy - delta_pixels > 0 else 0)
+                        end_point = (cx + delta_pixels if cx + delta_pixels < width else width, cy + delta_pixels if cy + delta_pixels < height else height)
             cv2.rectangle(img, start_point, end_point, color=(255, 0, 255), thickness=2)
             
             if start_point != (0, 0) and end_point != (0, 0):
