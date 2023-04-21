@@ -9,6 +9,7 @@ import torchvision
 import torch
 import torch.nn as nn
 import mediapipe as mp
+import torch.nn.functional as nnf
 
 class CameraException(Exception):
     "Could not read camera"
@@ -40,6 +41,7 @@ def load_model(num_classes):
 
 def main():
     classes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y']
+    letter = '#'
     model = load_model(len(classes))
     
     cam = cv2.VideoCapture(0)
@@ -79,22 +81,21 @@ def main():
             cv2.rectangle(img, start_point, end_point, color=(255, 0, 255), thickness=2)
             
             if start_point != (0, 0) and end_point != (0, 0):
-                cropped_image = img[start_point[0]:end_point[0], start_point[1]:end_point[1]]
+                cropped_image = img[start_point[1]:end_point[1], start_point[0]:end_point[0]]
                 img.flags.writeable = False        
                 
                 image = transform(cropped_image)
-                
+                cv2.imshow("Cropped Image", cropped_image)
                 if USE_GPU:
                     with torch.no_grad():
                         image = image.to(DEVICE)
                         
                 output = model(image.unsqueeze(0))
-                
-                _, pred = torch.max(output.data, 1)
-                
-                print(pred)
-                
-                letter = classes[pred]
+                prob = nnf.softmax(output, dim=1)
+                score, pred = prob.topk(1, dim = 1)
+                # score, pred = torch.max(output.data, 1)
+                if score > 0.5:
+                    letter = classes[pred]
                 
                 del image, output, pred
                 torch.cuda.empty_cache()
