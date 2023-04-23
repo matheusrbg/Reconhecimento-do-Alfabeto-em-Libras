@@ -11,6 +11,6 @@ Reconhecimento de Sinais de Letras em Libras utilizando diferentes tecnicas de m
 
 
 ### Rodando o Código
-python cam_reader.py [modelo] [versão]
+  python cam_reader.py [modelo] [versão]
 
-Ex.: python cam_reader.py convnext 3
+  Ex.: python cam_reader.py convnext 3
