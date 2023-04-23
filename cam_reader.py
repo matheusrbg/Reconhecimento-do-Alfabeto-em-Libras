@@ -21,7 +21,7 @@ USE_GPU = torch.cuda.is_available()
 MODEL = sys.argv[1]
 
 def load_vgg(num_classes):    
-    model = torchvision.models.vgg19_bn()
+    model = torchvision.models.vgg19_bn(weights='IMAGENET1K_V1')
 
     # Newly created modules have require_grad=True by default
     num_features = model.classifier[6].in_features
@@ -38,7 +38,7 @@ def load_vgg(num_classes):
     return model
     
 def load_resnet(num_classes):
-    model = torchvision.models.resnet34()
+    model = torchvision.models.resnet34(weights='IMAGENET1K_V1')
 
     model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
     torch.nn.init.xavier_uniform_(model.fc.weight)
@@ -51,9 +51,31 @@ def load_resnet(num_classes):
 
     return model
 
+def load_googlenet(num_classes):
+
+    model = torchvision.models.googlenet(weights='IMAGENET1K_V1')
+
+    model.fc=nn.Sequential(
+        nn.Linear(in_features=1024,out_features=512),
+        nn.ReLU(),
+        nn.Linear(in_features=512,out_features=128),
+        nn.ReLU(),
+        nn.Linear(in_features=128,out_features=32),
+        nn.ReLU(),
+        nn.Linear(in_features=32,out_features=num_classes,bias=True)
+    ) 
+
+    # Load fine tuned model
+    model.load_state_dict(torch.load(MODEL_PATH))
+
+    if USE_GPU:
+        model.to(DEVICE)
+
+    return model    
+
 def load_convnext(num_classes):
   
-    model = torchvision.models.convnext_tiny()
+    model = torchvision.models.convnext_tiny(weights='IMAGENET1K_V1')
   
     n_inputs = None
     for name, child in model.named_children():
@@ -88,14 +110,23 @@ def load_convnext(num_classes):
 if MODEL.lower() == 'vgg':
     MODEL_PATH = "VGG19_libras.pt"
     LOAD = load_vgg
+elif MODEL.lower() == 'vgg2':
+    MODEL_PATH = "VGG19_2_libras.pt"
+    LOAD = load_vgg
 elif MODEL.lower() == 'resnet':
     MODEL_PATH = "resnet_libras.pt"
     LOAD = load_resnet
 elif MODEL.lower() == 'googlenet':
     MODEL_PATH = "googlenet_libras.pt"
     LOAD = load_googlenet
+elif MODEL.lower() == 'googlenet2':
+    MODEL_PATH = "googlenet2_libras.pt"
+    LOAD = load_googlenet
 elif MODEL.lower() == 'convnext':
     MODEL_PATH = "convnext_libras.pt"
+    LOAD = load_convnext
+elif MODEL.lower() == 'convnext2':
+    MODEL_PATH = "convnext2_libras.pt"
     LOAD = load_convnext
 
 def main():
@@ -119,7 +150,6 @@ def main():
     model.eval()
 
     while True:
-        count = 0
         success, img = cam.read()
         if not success:
             raise CameraException()
@@ -154,23 +184,19 @@ def main():
                 output = model(image.unsqueeze(0))
                 prob = nnf.softmax(output, dim=1)
                 score, pred = prob.topk(1, dim = 1)
-                
                 # score, pred = torch.max(output.data, 1)
-                if score > 0.9:
+                if score.item() > 0.8:
                     letter = classes[pred]
-                    count = 0
                 else:
-                    count +=1
-                    if count >10:
-                        letter = '#'
-                        count = 0
+                    letter = '#'
+                
                 
                 del image, output, pred
                 torch.cuda.empty_cache()
                 
                 img.flags.writeable = True
 
-                cv2.putText(img, str(score), (10, 170), cv2.FONT_HERSHEY_PLAIN, 3,
+                cv2.putText(img, str(score.item()), (10, 170), cv2.FONT_HERSHEY_PLAIN, 3,
                             (255, 0, 255), 3)
 
                 cv2.putText(img, str(letter), (10, 120), cv2.FONT_HERSHEY_PLAIN, 3,
