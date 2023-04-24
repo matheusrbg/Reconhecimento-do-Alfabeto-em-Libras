@@ -9,7 +9,7 @@ Reconhecimento de Sinais de Letras em Libras utilizando diferentes tecnicas de m
 
 ### Baixando os modelos
 
-Você vai encontrar no [Drive](https://drive.google.com/drive/folders/1FWLEjItsCVNp2cz_t_xlUzyctqFvhMqu?usp=sharing) os modelos no formato [modelo][versão]libras.pt, basta baixar esse aplicativo e colocar no mesmo diretório de cam_reader.py e executar como indicado
+Você vai encontrar no [Drive](https://drive.google.com/drive/folders/1FWLEjItsCVNp2cz_t_xlUzyctqFvhMqu?usp=sharing) os modelos no formato [modelo][versão]_libras.pt, basta baixar esse aplicativo e colocar no mesmo diretório de cam_reader.py e executar como indicado
 
 ### Dependencias
 
