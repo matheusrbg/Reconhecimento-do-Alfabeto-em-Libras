@@ -1,10 +1,5 @@
-# pip install opencv-python
-# pip install mediapipe
-
 import cv2
-import numpy as np
 import time
-from math import pi
 import torchvision
 import torch
 import sys
@@ -188,7 +183,7 @@ def main():
                 output = model(image.unsqueeze(0))
                 prob = nnf.softmax(output, dim=1)
                 score, pred = prob.topk(1, dim = 1)
-                # score, pred = torch.max(output.data, 1)
+                
                 if score.item() > 0.8:
                     letter = classes[pred]
                 else:
@@ -200,7 +195,7 @@ def main():
                 
                 img.flags.writeable = True
 
-                cv2.putText(img, str(score.item()), (10, 170), cv2.FONT_HERSHEY_PLAIN, 3,
+                cv2.putText(img, "%.2f" % score.item(), (10, 170), cv2.FONT_HERSHEY_PLAIN, 3,
                             (255, 0, 255), 3)
 
                 cv2.putText(img, str(letter), (10, 120), cv2.FONT_HERSHEY_PLAIN, 3,
