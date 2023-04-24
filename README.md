@@ -9,6 +9,10 @@ Reconhecimento de Sinais de Letras em Libras utilizando diferentes tecnicas de m
 
 ### Dependencias
 
+pip install opencv-python
+pip install mediapipe
+pip install time
+torch, torchvision com cuda. Veja [Instalação](https://pytorch.org/get-started/locally/)
 
 ### Rodando o Código
   python cam_reader.py [modelo] [versão]
