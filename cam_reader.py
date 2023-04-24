@@ -19,6 +19,10 @@ class CameraException(Exception):
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 USE_GPU = torch.cuda.is_available()
 MODEL = sys.argv[1]
+try:
+    VERSION = sys.argv[2]
+except:
+    VERSION = None
 
 def load_vgg(num_classes):    
     model = torchvision.models.vgg19_bn(weights='IMAGENET1K_V1')
@@ -52,22 +56,25 @@ def load_resnet(num_classes):
     return model
 
 def load_googlenet(num_classes):
-
+    
     model = torchvision.models.googlenet(weights='IMAGENET1K_V1')
-
-    model.fc=nn.Sequential(
-        nn.Linear(in_features=1024,out_features=512),
-        nn.ReLU(),
-        nn.Linear(in_features=512,out_features=128),
-        nn.ReLU(),
-        nn.Linear(in_features=128,out_features=32),
-        nn.ReLU(),
-        nn.Linear(in_features=32,out_features=num_classes,bias=True)
-    ) 
+    
+    if MODEL_PATH == "googlenet_libras.pt" or MODEL_PATH == "googlenet2_libras.pt":
+        model.fc=nn.Sequential(
+            nn.Linear(in_features=1024,out_features=512),
+            nn.ReLU(),
+            nn.Linear(in_features=512,out_features=128),
+            nn.ReLU(),
+            nn.Linear(in_features=128,out_features=32),
+            nn.ReLU(),
+            nn.Linear(in_features=32,out_features=num_classes,bias=True)
+        )
+    else:
+        model.fc=nn.Linear(in_features=1024,out_features=num_classes)
 
     # Load fine tuned model
     model.load_state_dict(torch.load(MODEL_PATH))
-
+    
     if USE_GPU:
         model.to(DEVICE)
 
@@ -110,23 +117,20 @@ def load_convnext(num_classes):
 if MODEL.lower() == 'vgg':
     MODEL_PATH = "VGG19_libras.pt"
     LOAD = load_vgg
-elif MODEL.lower() == 'vgg2':
-    MODEL_PATH = "VGG19_2_libras.pt"
-    LOAD = load_vgg
 elif MODEL.lower() == 'resnet':
     MODEL_PATH = "resnet_libras.pt"
     LOAD = load_resnet
 elif MODEL.lower() == 'googlenet':
-    MODEL_PATH = "googlenet_libras.pt"
-    LOAD = load_googlenet
-elif MODEL.lower() == 'googlenet2':
-    MODEL_PATH = "googlenet2_libras.pt"
+    if VERSION == None or VERSION == '1':
+        MODEL_PATH = "googlenet_libras.pt"
+    else:
+        MODEL_PATH = "googlenet" + VERSION + "_libras.pt"
     LOAD = load_googlenet
 elif MODEL.lower() == 'convnext':
-    MODEL_PATH = "convnext_libras.pt"
-    LOAD = load_convnext
-elif MODEL.lower() == 'convnext2':
-    MODEL_PATH = "convnext2_libras.pt"
+    if VERSION == None or VERSION == '1':
+        MODEL_PATH = "convnext_libras.pt"
+    else:
+        MODEL_PATH = "convnext" + VERSION + "_libras.pt"
     LOAD = load_convnext
 
 def main():
