@@ -11,10 +11,10 @@ Você vai encontrar no [Drive](https://drive.google.com/drive/folders/1FWLEjItsC
 
 | Modelo | Acurácia | Link para download | Notebook
 |  ---  | ----------- | ---------------- | --------
-| ConvNeXt3 | 0.9998   | [convnext3_libras.pt](https://drive.google.com/file/d/1Bv6CR5WcR2eSjWXlWV0IJwWtMU78eZ6F/view?usp=share_link) | [convnext3.ipynb](https://github.com/matheusrbg/Reconhecimento-do-Alfabeto-em-Libras/blob/organizando/ConvNeXt/convnext3.ipynb) |
-| Resnet | 0.9853  | [resnet_libras.pt](https://drive.google.com/file/d/12le1-ssMleU19GBJIa7otkuMNvMor9Zo/view?usp=share_link) | [resnet2.ipynb](https://github.com/matheusrbg/Reconhecimento-do-Alfabeto-em-Libras/blob/organizando/ResNet/resnet2.ipynb) |
-| VGG2  | 1.0   | [VGG19_2_libras.pt](https://drive.google.com/file/d/1-Sh3648G-tRaNsfmO4fzGQGWbIBGhXTn/view?usp=share_link)  | [vgg19bn.ipynb]() |
-| GoogLeNet4  | 0.9806  | [googlenet4_libras.pt](https://drive.google.com/file/d/1-5H7juRIZH4uCsAwz2v9N6otOqTwIlGb/view?usp=share_link) | [googlenet4.ipynb]() |
+| ConvNeXt3 | 0.9998   | [convnext3_libras.pt](https://drive.google.com/file/d/1Bv6CR5WcR2eSjWXlWV0IJwWtMU78eZ6F/view?usp=share_link) | [convnext3.ipynb](https://github.com/matheusrbg/Reconhecimento-do-Alfabeto-em-Libras/blob/main/ConvNeXt/convnext3.ipynb) |
+| Resnet | 0.9853  | [resnet_libras.pt](https://drive.google.com/file/d/12le1-ssMleU19GBJIa7otkuMNvMor9Zo/view?usp=share_link) | [resnet2.ipynb](https://github.com/matheusrbg/Reconhecimento-do-Alfabeto-em-Libras/blob/main/ResNet/resnet2.ipynb) |
+| VGG2  | 1.0   | [VGG19_2_libras.pt](https://drive.google.com/file/d/1-Sh3648G-tRaNsfmO4fzGQGWbIBGhXTn/view?usp=share_link)  | [vgg19bn_2.ipynb](https://github.com/matheusrbg/Reconhecimento-do-Alfabeto-em-Libras/blob/main/VGG/vgg19bn_2.ipynb) |
+| GoogLeNet4  | 0.9806  | [googlenet4_libras.pt](https://drive.google.com/file/d/1-5H7juRIZH4uCsAwz2v9N6otOqTwIlGb/view?usp=share_link) | [googlenet4.ipynb](https://github.com/matheusrbg/Reconhecimento-do-Alfabeto-em-Libras/blob/main/GoogLeNet/googlenet4.ipynb) |
 
 
 ### Dependencias
