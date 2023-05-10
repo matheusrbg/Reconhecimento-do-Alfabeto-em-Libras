@@ -15,9 +15,11 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 USE_GPU = torch.cuda.is_available()
 MODEL = sys.argv[1]
 try:
-    VERSION = sys.argv[2]
+    VALID = int(sys.argv[2])
+    TRANSF = int(sys.argv[3])
 except:
-    VERSION = None
+    VALID = 0
+    TRANSF = 1
 
 def load_vgg(num_classes):    
     model = torchvision.models.vgg19_bn(weights='IMAGENET1K_V1')
@@ -110,22 +112,76 @@ def load_convnext(num_classes):
     return model
 
 if MODEL.lower() == 'vgg':
-    MODEL_PATH = "VGG19_libras.pt"
+    if VALID == 1:
+        if TRANSF == 1:
+            MODEL_PATH = "VGG19_libras.pt"
+        elif TRANSF == 2:
+            MODEL_PATH = "VGG19_2_libras.pt"
+        else:
+            raise ValueError("Transformada " + str(TRANSF) + "não existe")
+    elif VALID == 0:
+        if TRANSF == 1:
+            raise NameError("Modelo ainda não existe")
+        elif TRANSF == 2:
+            raise NameError("Modelo ainda não existe")
+        else:
+            raise ValueError("Transformada " + str(TRANSF) + "não existe")
+    else:
+        raise ValueError("Validação deve ser 0 ou 1, " + str(VALID) + "foi recebido")
     LOAD = load_vgg
 elif MODEL.lower() == 'resnet':
-    MODEL_PATH = "resnet_libras.pt"
+    if VALID == 1:
+        if TRANSF == 1:
+            MODEL_PATH = "VGG19_libras.pt"
+        elif TRANSF == 2:
+            MODEL_PATH = "resnet2_libras.pt"
+        else:
+            raise ValueError("Transformada " + str(TRANSF) + "não existe")
+    elif VALID == 0:
+        if TRANSF == 1:
+            MODEL_PATH = "VGG19_libras.pt"
+        elif TRANSF == 2:
+            MODEL_PATH = "resnet_libras.pt"
+        else:
+            raise ValueError("Transformada " + str(TRANSF) + "não existe")
+    else:
+        raise ValueError("Validação deve ser 0 ou 1, " + str(VALID) + "foi recebido")
     LOAD = load_resnet
 elif MODEL.lower() == 'googlenet':
-    if VERSION == None or VERSION == '1':
-        MODEL_PATH = "googlenet_libras.pt"
+    if VALID == 1:
+        if TRANSF == 1:
+            MODEL_PATH = "VGG19_libras.pt"
+        elif TRANSF == 2:
+            MODEL_PATH = "VGG19_libras.pt"
+        else:
+            raise ValueError("Transformada " + str(TRANSF) + "não existe")
+    elif VALID == 0:
+        if TRANSF == 1:
+            MODEL_PATH = "VGG19_libras.pt"
+        elif TRANSF == 2:
+            MODEL_PATH = "VGG19_libras.pt"
+        else:
+            raise ValueError("Transformada " + str(TRANSF) + "não existe")
     else:
-        MODEL_PATH = "googlenet" + VERSION + "_libras.pt"
+        raise ValueError("Validação deve ser 0 ou 1, " + str(VALID) + "foi recebido")
     LOAD = load_googlenet
 elif MODEL.lower() == 'convnext':
-    if VERSION == None or VERSION == '1':
-        MODEL_PATH = "convnext_libras.pt"
+    if VALID == 1:
+        if TRANSF == 1:
+            MODEL_PATH = "VGG19_libras.pt"
+        elif TRANSF == 2:
+            MODEL_PATH = "VGG19_libras.pt"
+        else:
+            raise ValueError("Transformada " + str(TRANSF) + "não existe")
+    elif VALID == 0:
+        if TRANSF == 1:
+            MODEL_PATH = "VGG19_libras.pt"
+        elif TRANSF == 2:
+            MODEL_PATH = "VGG19_libras.pt"
+        else:
+            raise ValueError("Transformada " + str(TRANSF) + "não existe")
     else:
-        MODEL_PATH = "convnext" + VERSION + "_libras.pt"
+        raise ValueError("Validação deve ser 0 ou 1, " + str(VALID) + "foi recebido")
     LOAD = load_convnext
 
 def main():
