@@ -132,14 +132,14 @@ if MODEL.lower() == 'vgg':
 elif MODEL.lower() == 'resnet':
     if VALID == 1:
         if TRANSF == 1:
-            MODEL_PATH = "VGG19_libras.pt"
+            MODEL_PATH = "resnet3_libras.pt"
         elif TRANSF == 2:
             MODEL_PATH = "resnet2_libras.pt"
         else:
             raise ValueError("Transformada " + str(TRANSF) + "não existe")
     elif VALID == 0:
         if TRANSF == 1:
-            MODEL_PATH = "VGG19_libras.pt"
+            raise NameError("Modelo ainda não existe")
         elif TRANSF == 2:
             MODEL_PATH = "resnet_libras.pt"
         else:
@@ -150,16 +150,16 @@ elif MODEL.lower() == 'resnet':
 elif MODEL.lower() == 'googlenet':
     if VALID == 1:
         if TRANSF == 1:
-            MODEL_PATH = "VGG19_libras.pt"
+            MODEL_PATH = "googlenet4_libras.pt"
         elif TRANSF == 2:
-            MODEL_PATH = "VGG19_libras.pt"
+            MODEL_PATH = "googlenet3_libras.pt"
         else:
             raise ValueError("Transformada " + str(TRANSF) + "não existe")
     elif VALID == 0:
         if TRANSF == 1:
-            MODEL_PATH = "VGG19_libras.pt"
+            MODEL_PATH = "googlenet_libras.pt"
         elif TRANSF == 2:
-            MODEL_PATH = "VGG19_libras.pt"
+            MODEL_PATH = "googlenet2_libras.pt"
         else:
             raise ValueError("Transformada " + str(TRANSF) + "não existe")
     else:
@@ -168,16 +168,16 @@ elif MODEL.lower() == 'googlenet':
 elif MODEL.lower() == 'convnext':
     if VALID == 1:
         if TRANSF == 1:
-            MODEL_PATH = "VGG19_libras.pt"
+            raise NameError("Modelo ainda não existe")
         elif TRANSF == 2:
-            MODEL_PATH = "VGG19_libras.pt"
+            MODEL_PATH = "convnext3_libras.pt"
         else:
             raise ValueError("Transformada " + str(TRANSF) + "não existe")
     elif VALID == 0:
         if TRANSF == 1:
-            MODEL_PATH = "VGG19_libras.pt"
+            MODEL_PATH = "convnext_libras.pt"
         elif TRANSF == 2:
-            MODEL_PATH = "VGG19_libras.pt"
+            MODEL_PATH = "convnext2_libras.pt"
         else:
             raise ValueError("Transformada " + str(TRANSF) + "não existe")
     else:
