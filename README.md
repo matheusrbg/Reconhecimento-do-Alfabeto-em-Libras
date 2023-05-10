@@ -39,12 +39,22 @@ pip3 install time
 * torch, torchvision com cuda. Veja [Instalação](https://pytorch.org/get-started/locally/)
 
 ### Rodando o Código
+Há duas opções para rodar o código, escolhendo a versão diretamente, ou as condições de treinamento:
 ```
 python cam_reader.py [modelo] [versão]
 ```
+ou
 
+```
+python cam_reader.py [modelo] [com validação == 1; sem validação == 0] [transformação: 1 ou 2]
+```
 
 Ex.:
 ```
 python cam_reader.py convnext 3
+```
+ou
+
+```
+python cam_reader.py convnext 1 2
 ```
